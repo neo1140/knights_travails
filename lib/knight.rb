@@ -1,19 +1,24 @@
-require_relative 'board.rb'
-
+require_relative 'board'
 # class for generating knight objects for a graph
 class Knight
   attr_reader :moves, :parent, :connected_knights, :position
+  @@knight_positions = []
+
   def initialize(position, parent = nil)
     @position = position
     @parent = parent
     @board = Board.new
     @connected_knights = []
     @moves = []
-    moves
+    moves_gen
+  end
+
+  def self.knight_positions
+    @@knight_positions
   end
 
   # adding all the legal moves to the moves array
-  def moves
+  def moves_gen
     move_one
     move_two
     move_three
@@ -100,15 +105,16 @@ class Knight
   # Uses legal moves to create new knight objects
   def make_knights
     @moves.each do |move|
-      if parent == nil
+      break if Knight.knight_positions.include?(move)
+
+      if parent.nil?
         knight = Knight.new(move, self)
-        @connected_knights << knight
       else
         knight = nil
         knight = Knight.new(move, self) unless move == @parent.position
-        @connected_knights << knight unless knight == nil
       end
+      @connected_knights << knight unless knight.nil?
+      @@knight_positions << knight.position unless knight.nil?
     end
   end
 end
-
