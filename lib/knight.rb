@@ -11,6 +11,8 @@ class Knight
     @connected_knights = []
     @moves = []
     moves_gen
+    @knight_history = []
+    @@knight_positions.each { |knight| @knight_history << knight }
   end
 
   def self.knight_positions
@@ -103,16 +105,11 @@ class Knight
   end
 
   # Uses legal moves to create new knight objects
-  def make_knights
+  def make_knights(target)
     @moves.each do |move|
-      break if Knight.knight_positions.include?(move)
+      break if @knight_history.include?(target) || @knight_history.include?(move)
 
-      if parent.nil?
-        knight = Knight.new(move, self)
-      else
-        knight = nil
-        knight = Knight.new(move, self) unless move == @parent.position
-      end
+      knight = Knight.new(move, self)
       @connected_knights << knight unless knight.nil?
       @@knight_positions << knight.position unless knight.nil?
     end
