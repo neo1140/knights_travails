@@ -9,6 +9,7 @@ class Travails
     @sequence = []
   end
 
+  # Builds graph of connected knight nodes
   def build_graph(node = @root)
     node.make_knights(@target)
     if node.connected_knights.empty?
@@ -20,6 +21,7 @@ class Travails
     end
   end
 
+  # Breadth first search to find target node
   def search(node = @root)
     if node.position == @target
       @target_node = node
@@ -29,6 +31,7 @@ class Travails
     end
   end
 
+  # After target node is found outputs the sequence of required moves
   def move_sequence(node = @target_node)
     @sequence.unshift(node.position)
     if node.parent == nil
